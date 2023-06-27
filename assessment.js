@@ -6,31 +6,29 @@ const tweetDivision = document.getElementById('tweet-area');
 
 assessmentButton.onclick = () => {
   const userName = userNameInput.value;
-
   if (userName.length === 0) {
     // 名前が空の時は処理を終了する
     return;
   }
-    // 診断結果表示エリアの作成
-    resultDivision.innerText = '';
-    const header = document.createElement('h3');
-    header.innerText = '診断結果';
-    resultDivision.appendChild(header);
-  
-    const paragraph = document.createElement('p');
-    const result = assessment(userName);
-    paragraph.innerText = result;
-    resultDivision.appendChild(paragraph);
-  
 
-  // TODO 診断結果表示エリアの作成
-  // TODO ツイートエリアの作成
+  // 診断結果表示エリアの作成
+  resultDivision.innerText = '';
+  const header = document.createElement('h3');
+  header.innerText = '診断結果';
+  resultDivision.appendChild(header);
+
+  const paragraph = document.createElement('p');
+  const result = assessment(userName);
+  paragraph.innerText = result;
+  resultDivision.appendChild(paragraph);
+
+  // ツイートエリアの作成
   tweetDivision.innerText = '';
   const anchor = document.createElement('a');
   const hrefValue =
-  'https://twitter.com/intent/tweet?button_hashtag=' +
-  encodeURIComponent('あなたのいいところ') +
-  '&ref_src=twsrc%5Etfw';
+    'https://twitter.com/intent/tweet?button_hashtag=' +
+    encodeURIComponent('あなたのいいところ') +
+    '&ref_src=twsrc%5Etfw';
 
   anchor.setAttribute('href', hrefValue);
   anchor.setAttribute('class', 'twitter-hashtag-button');
@@ -39,19 +37,10 @@ assessmentButton.onclick = () => {
 
   tweetDivision.appendChild(anchor);
 
-
   const script = document.createElement('script');
   script.setAttribute('src', 'https://platform.twitter.com/widgets.js');
   tweetDivision.appendChild(script);
 };
-
-userNameInput.onkeydown = event => {
-  if (event.key === 'Enter') {
-    assessmentButton.onclick();
-  }
-};
-
-
 
 const answers = [
   '###userName###のいいところは声です。###userName###の特徴的な声は皆を惹きつけ、心に残ります。',
@@ -78,19 +67,20 @@ const answers = [
  * @return {string} 診断結果
  */
 function assessment(userName) {
-    // 全文字のコード番号を取得してそれを足し合わせる
-    let sumOfCharCode = 0;
-    for (let i = 0; i < userName.length; i++) {
-      sumOfCharCode = sumOfCharCode + userName.charCodeAt(i);
-    }
-  
-    // 文字のコード番号の合計を回答の数で割って添字の数値を求める
-    const index = sumOfCharCode % answers.length;
-    let result = answers[index];
-    result = result.replaceAll('###userName###', userName);
-    return result;
-  return '';
+  // 全文字のコード番号を取得してそれを足し合わせる
+  let sumOfCharCode = 0;
+  for (let i = 0; i < userName.length; i++) {
+    sumOfCharCode = sumOfCharCode + userName.charCodeAt(i);
+  }
+
+  // 文字のコード番号の合計を回答の数で割って添字の数値を求める
+  const index = sumOfCharCode % answers.length;
+  let result = answers[index];
+
+  result = result.replaceAll('###userName###', userName);
+  return result;
 }
+
 // テストコード
 console.assert(
   assessment('太郎') ===
